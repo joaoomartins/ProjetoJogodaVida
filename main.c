@@ -49,7 +49,7 @@ void addCells(int quant_cells){
 //Apaga Varias Celulas
 //quant_cells == Quantidade de Celulas a inserir pelo utilizador
 ///TODO: If's para lidar com erros
-void deleteCells(int quant_cells){}
+void deleteCells(int quant_cells){
 	int line, column;
 	for (int i = 1; i <= quant_cells; i++){
 		fflush(stdin);
@@ -80,7 +80,7 @@ int aliveCells(){
 	for (int line = 0; line < TAM; line++) {
 		for (int column = 0; column < TAM; column++) {
 			if (table[line][column] == 1) {
-				contAliveCells += 1
+				contAliveCells += 1;
 			}
 			
 		}
