@@ -1,7 +1,7 @@
-//include <stdio.h>
-//include <string.h>
-//include <stdlib.h>
-//define TAM 25
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#define TAM 25
 
 //se table == 1 significa que a celula esta viva / se table == 0 a celula esta morta
 
