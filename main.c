@@ -4,7 +4,7 @@
 
 int menu() {
     int option;
-	printf("*-------------------------------------------------------------------------------------*\n");
+	  printf("*-------------------------------------------------------------------------------------*\n");
     printf("|       _                                 _            __      __  _       _          |\n");
     printf("|      | |                               | |           \\ \\    / / (_)     | |         |\n");
     printf("|      | |   ___     __ _    ___       __| |   __ _     \\ \\  / /   _    __| |   __ _  |\n");
@@ -56,39 +56,38 @@ void tabuleiro() {
 
 int main () {
     int option;
-    //tabuleiro();
     while (option != 0)
     {
         option = menu();
          switch (option)
         {
-        case 0:
-            break;
-        case 1:
-            tabuleiro();
-            break;
-        case 2:
-            break;
-        case 3:
-            break;
-        case 4:
-            break;
-        case 5:
-            break;
-        case 6:
-            break;
-        case 7:
-            break;
-        case 8:
-            tabuleiro();
-            break;
-        case 9:
-            break;                      
-        default:
-            printf("Opcao invalida, introduza uma opcao valida!");
-            system("pause");
-            menu();
-            break;
+          case 0:
+              break;
+          case 1:
+              tabuleiro();
+              break;
+          case 2:
+              break;
+          case 3:
+              break;
+          case 4:
+              break;
+          case 5:
+              break;
+          case 6:
+              break;
+          case 7:
+              break;
+          case 8:
+              tabuleiro();
+              break;
+          case 9:
+              break;                      
+          default:
+              printf("Opcao invalida, introduza uma opcao valida!");
+              system("pause");
+              menu();
+              break;
         }
     } 
 	return 0;
