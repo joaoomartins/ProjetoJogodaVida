@@ -6,13 +6,22 @@
 //se table == 1 significa que a celula esta viva / se table == 0 a celula esta morta
 
 //table (tabuleiro) como variavel global para ser mais facil de se acessar fora do main e etc.
-int table[TAM][TAM];
+int table[TAM][TAM], cellsToBorn[TAM][TAM], cellsToKill[TAM][TAM];
+
+/*
+Glider: (23,23); (22,22); (21,22); (21,23); (21,24); --> Mexe-se
+Blinker: (1,1); (1,2); (1,3); --> Mexe-se
+Block: (3,3); (3,4); (4,3); (4,4); --> Nao se mexe
+Bote: (20,20); (19,19); (18, 19); (18,20); (19, 21) --> Nao se mexe
+*/
 
 void resetTable(){
 	int line, column;
 	for (int line = 0; line < TAM; line++){
 		for (int column = 0; column < TAM; column++){
 			table[line][column] = 0;
+			cellsToBorn[line][column] = 0;
+			cellsToKill[line][column] = 0;
 		}
 	}
 }
@@ -104,35 +113,97 @@ void deleteCells(){
 	}
 }
 
+//neighbours: Celulas vizinhas vivas
 //Avanca Varias geracoes;
 //Se for preciso avancar apenas 1 geracao fazer advanceGen(1);
 //Se for preciso avancar varias geracoes fazer advanceGen(quantidade_de_geracoes);
 int advanceGen(int quant_gens){
-	int line, column, neighbours;
+	int line, column, neighbours = 0;
 	if (quant_gens == 0) {
 		return 0;
 	} else {
+		showTable();
+		system("pause");
 		
 		for (line = 0; line < TAM; line++) {
 			for (column = 0; column < TAM; column++) {
+				
 				if (line == 0 && column == 0) {
 					if (table[line + 1][column] == 1) {
 						neighbours += 1;
 					}
 					
-					if (table[line][column] == 1) {
+					if (table[line][column + 1] == 1) {
 						neighbours += 1;
 					}
 					
 					if (table[line + 1][column + 1] == 1) {
 						neighbours += 1;
 					}
-				} else if (line < TAM && column < TAM) {
+					
+				} else if (line == 0 && column > 0 && column < TAM) {
 					if (table[line + 1][column] == 1) {
 						neighbours += 1;
 					}
 					
-					if (table[line][column] == 1) {
+					if (table[line][column + 1] == 1) {
+						neighbours += 1;
+					}
+					
+					if (table[line + 1][column + 1] == 1) {
+						neighbours += 1;
+					}
+					
+					if (table[line][column - 1] == 1) {
+						neighbours += 1;
+					}
+					
+					if (table[line + 1][column - 1] == 1) {
+						neighbours += 1;
+					}
+					
+				} else if (line == TAM - 1 && column == TAM - 1) {
+					if (table[line - 1][column] == 1) {
+						neighbours += 1;
+					}
+					
+					if (table[line][column - 1] == 1) {
+						neighbours += 1;
+					}
+					
+					if (table[line - 1][column - 1] == 1) {
+						neighbours += 1;
+					}
+					
+					
+				} else if (line == TAM - 1 && column < TAM && column >= 0) {
+					if (table[line - 1][column] == 1) {
+						neighbours += 1;
+					}
+					
+					if (table[line][column - 1] == 1) {
+						neighbours += 1;
+					}
+					
+					
+					if (table[line][column + 1] == 1) {
+						neighbours += 1;
+					}
+					
+					if (table[line - 1][column - 1] == 1) {
+						neighbours += 1;
+					}
+					
+					if (table[line - 1][column + 1] == 1) {
+						neighbours += 1;
+					}
+				
+				} else {
+					if (table[line + 1][column] == 1) {
+						neighbours += 1;
+					}
+					
+					if (table[line][column + 1] == 1) {
 						neighbours += 1;
 					}
 					
@@ -151,32 +222,46 @@ int advanceGen(int quant_gens){
 					if (table[line - 1][column - 1] == 1) {
 						neighbours += 1;
 					}
-				} else {
-					if (table[line - 1][column] == 1) {
+					
+					if (table[line + 1][column - 1] == 1) {
 						neighbours += 1;
 					}
 					
-					if (table[line][column - 1] == 1) {
+					if (table[line - 1][column + 1] == 1) {
 						neighbours += 1;
 					}
 					
-					if (table[line - 1][column - 1] == 1) {
-						neighbours += 1;
-					}
+				}
+				
+				if (neighbours == 3 && table[line][column] == 0) {
+					cellsToBorn[line][column] = 1;
 				}
 				
 				if (neighbours >= 4 || neighbours == 1 && table[line][column] == 1) {
-					table[line][column] = 0;
-					
-				} else if (neighbours == 3 && table[line][column] == 0) {
-					table[line][column] == 1;
+					cellsToKill[line][column] = 1;
 				}
 				
+				neighbours = 0;
 			}
 		}
 		
-		quant_gens -= 1;
-		advanceGen(quant_gens);
+	for (line = 0; line < TAM; line++) {
+		for (column = 0; column < TAM; column++) {
+			if (cellsToBorn[line][column] == 1) {
+				table[line][column] = 1;
+				cellsToBorn[line][column] = 0;
+			}
+			
+			if (cellsToKill[line][column] == 1) {
+				table[line][column] = 0;
+				cellsToKill[line][column] = 0;
+			}
+		}
+	}
+		
+	quant_gens -= 1;
+	advanceGen(quant_gens);
+	
 	}
 }
 
