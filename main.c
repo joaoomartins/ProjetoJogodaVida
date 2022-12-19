@@ -37,7 +37,7 @@ void addCells(int quant_cells){
 	int line, column;
 	for (int i = 1; i <= quant_cells; i++){
 		fflush(stdin);
-		print("\nIntroduza o numero da linha: ");
+		printf("\nIntroduza o numero da linha: ");
 		scanf("%d", line);
 		fflush(stdin);
 		printf("\nIntroduza o numero da coluna: ");
@@ -53,7 +53,7 @@ void deleteCells(int quant_cells){
 	int line, column;
 	for (int i = 1; i <= quant_cells; i++){
 		fflush(stdin);
-		print("\nIntroduza o numero da linha: ");
+		printf("\nIntroduza o numero da linha: ");
 		scanf("%d", line);
 		fflush(stdin);
 		printf("\nIntroduza o numero da coluna: ");
@@ -62,21 +62,86 @@ void deleteCells(int quant_cells){
 	}
 }
 
-//Avanca 1 geracao
-//Talvez de para fazer esta funcao com recursao e assim avancar nao precisar da advanceGens
-void advanceOneGen(){
-	//TODO
-}
-
-//Avanca Varias geracoes (Inseridas pelo utilizador com quant_gens)
-void advanceGens(int quant_gens){
-	//TODO
+//Avanca Varias geracoes;
+//Se for preciso avancar apenas 1 geracao fazer advanceGen(1);
+//Se for preciso avancar varias geracoes fazer advanceGen(quantidade_de_geracoes);
+int advanceGen(int quant_gens){
+	int line, column, neighbours;
+	if (quant_gens == 0) {
+		return 0;
+	} else {
+		
+		for (line = 0; line < TAM; line++) {
+			for (column = 0; column < TAM; column++) {
+				if (line == 0 && column == 0) {
+					if (table[line + 1][column] == 1) {
+						neighbours += 1;
+					}
+					
+					if (table[line][column] == 1) {
+						neighbours += 1;
+					}
+					
+					if (table[line + 1][column + 1] == 1) {
+						neighbours += 1;
+					}
+				} else if (line < TAM && column < TAM) {
+					if (table[line + 1][column] == 1) {
+						neighbours += 1;
+					}
+					
+					if (table[line][column] == 1) {
+						neighbours += 1;
+					}
+					
+					if (table[line + 1][column + 1] == 1) {
+						neighbours += 1;
+					}
+					
+					if (table[line - 1][column] == 1) {
+						neighbours += 1;
+					}
+					
+					if (table[line][column - 1] == 1) {
+						neighbours += 1;
+					}
+					
+					if (table[line - 1][column - 1] == 1) {
+						neighbours += 1;
+					}
+				} else {
+					if (table[line - 1][column] == 1) {
+						neighbours += 1;
+					}
+					
+					if (table[line][column - 1] == 1) {
+						neighbours += 1;
+					}
+					
+					if (table[line - 1][column - 1] == 1) {
+						neighbours += 1;
+					}
+				}
+				
+				if (neighbours >= 4 || neighbours == 1 && table[line][column] == 1) {
+					table[line][column] = 0;
+					
+				} else if (neighbours == 3 && table[line][column] == 0) {
+					table[line][column] == 1;
+				}
+				
+			}
+		}
+		
+		quant_gens -= 1;
+		advanceGen(quant_gens);
+	}
 }
 
 //Funcoes para as Estatisticas do jogo
 //Celulas vivas na presente geracao
 int aliveCells(){
-	int contAliveCells = 0;
+	int contAliveCells = 0, line, column;;
 	for (int line = 0; line < TAM; line++) {
 		for (int column = 0; column < TAM; column++) {
 			if (table[line][column] == 1) {
@@ -91,7 +156,6 @@ int aliveCells(){
 
 
 
-int main () {
-	
+int main () {	
     return 0;
-} 
+}
