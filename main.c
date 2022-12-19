@@ -9,23 +9,53 @@
 int table[TAM][TAM];
 
 void resetTable(){
-	for (int i = 0; i < TAM; i++){
-		for (int j = 0; j < TAM; j++){
-			table[i][j] = 0;
+	int line, column;
+	for (int line = 0; line < TAM; line++){
+		for (int column = 0; column < TAM; column++){
+			table[line][column] = 0;
 		}
 	}
 }
 
-//Adiciona apenas 1 celula, os parametros sao as coordenadas inseridas pelo utilizador
+void showTable(){
+	int line, column;
+	
+	system("cls");
+	
+	for (line = 0; line < TAM; line++) {
+		for (column = 0; column < TAM; column++) {
+			if (table[line][column] == 1) {
+				printf(" * ");
+			} else {
+				printf(" . ");
+			}
+		}
+		printf("\n");
+	}
+}
+
+//Adiciona apenas 1 celula
 //TODO: If's para lidar com erros
-void addOneCell(int line, int column){
+void addOneCell(){
+	int line, column;
+	
+	fflush(stdin);
+	
+	printf("\nInsira as coordenadas da celula (linha, coluna): ");
+	scanf("(%d, %d)", &line, &column);
 	table[line][column] = 1;
 	
 }
 
 //Apaga apenas 1 celula, os parametros sao as coordenadas inseridas pelo utilizador
 //TODO: If's para lidar com erros
-void deleteOneCell(int line, int column){
+void deleteOneCell(){
+	int line, column;
+	
+	fflush(stdin);
+	
+	printf("\nInsira as coordenadas da celula (linha, coluna): ");
+	scanf("(%d, %d)", &line, &column);
 	table[line][column] = 0;
 	
 }
@@ -33,15 +63,21 @@ void deleteOneCell(int line, int column){
 //Adiciona Varias Celulas
 //quant_cells == Quantidade de Celulas a inserir pelo utilizador
 //TODO: If's para lidar com erros
-void addCells(int quant_cells){
-	int line, column;
+void addCells(){
+	int line, column, quant_cells;
+	
+	fflush(stdin);
+	
+	printf("\nInsira a quantidade de celulas que deseja adicionar: ");
+	scanf("%d", &quant_cells);
+	
 	for (int i = 1; i <= quant_cells; i++){
+		showTable();
+		
 		fflush(stdin);
-		printf("\nIntroduza o numero da linha: ");
-		scanf("%d", line);
-		fflush(stdin);
-		printf("\nIntroduza o numero da coluna: ");
-		scanf("%d", column);
+		
+		printf("\nInsira as coordenadas da celula (linha, coluna): ");
+		scanf("(%d, %d)", &line, &column);
 		table[line][column] = 1;
 	}
 }
@@ -49,15 +85,21 @@ void addCells(int quant_cells){
 //Apaga Varias Celulas
 //quant_cells == Quantidade de Celulas a inserir pelo utilizador
 ///TODO: If's para lidar com erros
-void deleteCells(int quant_cells){
-	int line, column;
+void deleteCells(){
+	int line, column, quant_cells;
+	
+	fflush(stdin);
+	
+	printf("\nInsira a quantidade de celulas que deseja apagar: ");
+	scanf("%d", &quant_cells);
+	
 	for (int i = 1; i <= quant_cells; i++){
+		showTable();
+		
 		fflush(stdin);
-		printf("\nIntroduza o numero da linha: ");
-		scanf("%d", line);
-		fflush(stdin);
-		printf("\nIntroduza o numero da coluna: ");
-		scanf("%d", column);
+		
+		printf("\nInsira as coordenadas da celula (linha, coluna): ");
+		scanf("(%d, %d)", &line, &column);
 		table[line][column] = 0;
 	}
 }
@@ -156,7 +198,7 @@ int aliveCells(){
 
 int menu() {
     int option;
-	  printf("*-------------------------------------------------------------------------------------*\n");
+	printf("*-------------------------------------------------------------------------------------*\n");
     printf("|       _                                 _            __      __  _       _          |\n");
     printf("|      | |                               | |           \\ \\    / / (_)     | |         |\n");
     printf("|      | |   ___     __ _    ___       __| |   __ _     \\ \\  / /   _    __| |   __ _  |\n");
@@ -192,38 +234,52 @@ int menu() {
 }
 
 int main () {
-    int option;
+    int option = 10, quant_gens;
+    
+    resetTable();
+    
     while (option != 0)
-    {
-        option = menu();
-         switch (option)
+    {    	
+    	showTable();
+        
+		option = menu();
+        
+		switch (option)
         {
-          case 0:
-              break;
-          case 1:
-              tabuleiro();
-              break;
-          case 2:
-              break;
-          case 3:
-              break;
-          case 4:
-              break;
-          case 5:
-              break;
-          case 6:
-              break;
-          case 7:
-              break;
-          case 8:
-              break;
-          case 9:
-              break;              
-          default:
-              printf("Opcao invalida, introduza uma opcao valida!");
-              system("pause");
-              menu();
-              break;
+        	case 0:
+            	break;
+        	case 1:
+        		addOneCell();
+            	break;
+        	case 2:
+        		deleteOneCell();
+            	break;
+        	case 3:
+        		addCells();
+            	break;
+        	case 4:
+        		deleteCells();
+            	break;
+        	case 5:
+        		resetTable();
+            	break;
+        	case 6:
+        		advanceGen(1);
+            	break;
+        	case 7:
+        		fflush(stdin);
+        		printf("\nIntroduza a quantidade de geracoes que deseja avancar: ");
+        		scanf("%d", &quant_gens);
+        		advanceGen(quant_gens);
+            	break;
+        	case 8:
+            	break;
+        	case 9:
+            	break;              
+        	default:
+            	printf("Opcao invalida, introduza uma opcao valida!");
+            	system("pause");
+            	break;
         }
     } 
 	return 0;
