@@ -6,16 +6,17 @@
 //se table == 1 significa que a celula esta viva / se table == 0 a celula esta morta
 
 //Esta variaveis sao globais para uma maior facilidade ao manuzia-las
-int table[TAM][TAM], cellsToBorn[TAM][TAM],
+int table[TAM][TAM],
+cellsToBorn[TAM][TAM],
 cellsToKill[TAM][TAM],
-mostCellsLived = 0, 
-gen = 0, 
-genMostCellsAlive = 0, 
-ages[TAM][TAM], 
-oldestCell = 0, 
-youngestCell = 10, 
-genYoungestCellBorn = 0, 
-genOldestCellBorn = 0, 
+mostCellsLived = 0,
+gen = 0,
+genMostCellsAlive = 0,
+ages[TAM][TAM],
+oldestCell = 0,
+youngestCell = 10,
+genYoungestCellBorn = 0,
+genOldestCellBorn = 0,
 lessCellsAlive = 0,
 genLessCellsAlive = 0;
 
@@ -324,7 +325,7 @@ int advanceGen(int quant_gens){
 					cellsToBorn[line][column] = 1;
 				}
 				
-				if (neighbours >= 4 || neighbours == 1 && table[line][column] == 1) {
+				if ((table[line][column] == 1 && neighbours >= 4) || (table[line][column] == 1 && neighbours <= 1)) {
 					cellsToKill[line][column] = 1;
 				}
 				
@@ -381,6 +382,7 @@ int advanceGen(int quant_gens){
 			
 			if (youngestCell > ages[line][column] && table[line][column] == 1) {
 				youngestCell = ages[line][column];
+				//O contador de geracoes (a variavel gen) ainda nao avancou por isso é que adiciona + 1 nesta conta
 				genYoungestCellBorn = (gen + 1) - ages[line][column];
 			}
 		}
@@ -437,8 +439,8 @@ void getGameStatistics() {
 	printf("\nQuantidade de celulas vivas: %d", aliveCells());
 	printf("\nNumero maximo de celulas vivas %d; Geracao: %d", mostCellsLived, genMostCellsAlive);
 	printf("\nNumero minimo de celulas vivas %d; Geracao: %d", lessCellsAlive, genLessCellsAlive);
-	printf("\nIdade da celulas mais velha %d; Nasceu na geracao: %d", oldestCell, genOldestCellBorn);
-	printf("\nIdade da celulas mais nova %d; Nasceu na geracao: %d", youngestCell, genYoungestCellBorn);
+	printf("\nIdade da celula mais velha %d; Nasceu na geracao: %d", oldestCell, genOldestCellBorn);
+	printf("\nIdade da celula mais nova %d; Nasceu na geracao: %d", youngestCell, genYoungestCellBorn);
 	printf("\nGeracao atual: %d", gen);
 	
 	for (int line = 0; line < TAM; line++) {
