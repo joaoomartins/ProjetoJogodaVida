@@ -14,7 +14,7 @@ gen = 0,
 genMostCellsAlive = 0,
 ages[TAM][TAM],
 oldestCell = 0,
-youngestCell = 10,
+youngestCell = 0,
 genYoungestCellBorn = 0,
 genOldestCellBorn = 0,
 lessCellsAlive = 0,
@@ -84,7 +84,7 @@ void resetTable(){
 	genMostCellsAlive = 0;
 	gen = 0;
 	oldestCell = 0;
-	youngestCell = 10;
+	youngestCell = 0;
 	genYoungestCellBorn = 0;
 	genOldestCellBorn = 0;
 }
@@ -343,7 +343,7 @@ int advanceGen(int quant_gens){
 			if (cellsToKill[line][column] == 1) {
 				table[line][column] = 0;
 				
-				if (youngestCell == ages[line][column] && gen != 0) {
+				if (youngestCell == ages[line][column]) {
 					youngestCell = gen;
 				}
 				
@@ -375,12 +375,12 @@ int advanceGen(int quant_gens){
 				ages[line][column] += 1;
 			}
 			
-			if (oldestCell < ages[line][column] && table[line][column] == 1) {
+			if (table[line][column] == 1 && oldestCell < ages[line][column]) {
 				oldestCell = ages[line][column];
 				genOldestCellBorn = (gen + 1) - ages[line][column];
 			}
 			
-			if (youngestCell > ages[line][column] && table[line][column] == 1) {
+			if (table[line][column] == 1 && youngestCell >= ages[line][column]) {
 				youngestCell = ages[line][column];
 				//O contador de geracoes (a variavel gen) ainda nao avancou por isso é que adiciona + 1 nesta conta
 				genYoungestCellBorn = (gen + 1) - ages[line][column];
@@ -442,7 +442,8 @@ void getGameStatistics() {
 	printf("\nIdade da celula mais velha %d; Nasceu na geracao: %d", oldestCell, genOldestCellBorn);
 	printf("\nIdade da celula mais nova %d; Nasceu na geracao: %d", youngestCell, genYoungestCellBorn);
 	printf("\nGeracao atual: %d", gen);
-	
+	printf("\n");
+	printf("\nHistograma de todas as celulas vivas:");
 	for (int line = 0; line < TAM; line++) {
 		for (int column = 0; column < TAM; column++) {
 			if (table[line][column] == 1) {
