@@ -5,15 +5,69 @@
 
 //se table == 1 significa que a celula esta viva / se table == 0 a celula esta morta
 
-//table (tabuleiro) como variavel global para ser mais facil de se acessar fora do main e etc.
-int table[TAM][TAM], cellsToBorn[TAM][TAM], cellsToKill[TAM][TAM];
+//Esta variaveis sao globais para uma maior facilidade ao manuzia-las
+int table[TAM][TAM], cellsToBorn[TAM][TAM],
+cellsToKill[TAM][TAM],
+mostCellsLived = 0, 
+gen = 0, 
+genMostCellsAlive = 0, 
+ages[TAM][TAM], 
+oldestCell = 0, 
+youngestCell = 10, 
+genYoungestCellBorn = 0, 
+genOldestCellBorn = 0, 
+lessCellsAlive = 0,
+genLessCellsAlive = 0;
 
-/*
-Glider: (23,23); (22,22); (21,22); (21,23); (21,24); --> Mexe-se
-Blinker: (1,1); (1,2); (1,3); --> Mexe-se
-Block: (3,3); (3,4); (4,3); (4,4); --> Nao se mexe
-Bote: (20,20); (19,19); (18, 19); (18,20); (19, 21) --> Nao se mexe
-*/
+//Estas funcoes sao chamadas no case mas nao estao no menu, sao apenas para facilitar os testes
+void addGlider() {
+	table[23][23] = 1;
+	table[22][22] = 1;
+	table[21][22] = 1;
+	table[21][23] = 1;
+	table[21][24] = 1;
+	
+	genMostCellsAlive = 5;
+	genLessCellsAlive = 5;
+	lessCellsAlive = 5;
+	mostCellsLived = 5;
+}
+
+void addBlinker() {
+	table[1][1] = 1;
+	table[1][2] = 1;
+	table[1][3] = 1;
+	
+	genMostCellsAlive = 3;
+	genLessCellsAlive = 3;
+	lessCellsAlive = 3;
+	mostCellsLived = 3;
+}
+
+void addBlock() {
+	table[1][1] = 1;
+	table[1][2] = 1;
+	table[2][1] = 1;
+	table[2][2] = 1;
+	
+	genMostCellsAlive = 4;
+	genLessCellsAlive = 4;
+	lessCellsAlive = 4;
+	mostCellsLived = 4;
+}
+
+void addBote() {
+	table[20][20] = 1;
+	table[19][19] = 1;
+	table[18][19] = 1;
+	table[18][20] = 1;
+	table[19][21] = 1;
+	
+	genMostCellsAlive = 5;
+	genLessCellsAlive = 5;
+	lessCellsAlive = 5;
+	mostCellsLived = 5;
+}
 
 void resetTable(){
 	int line, column;
@@ -22,8 +76,16 @@ void resetTable(){
 			table[line][column] = 0;
 			cellsToBorn[line][column] = 0;
 			cellsToKill[line][column] = 0;
+			ages[line][column] = 0;
 		}
 	}
+	mostCellsLived = 0;
+	genMostCellsAlive = 0;
+	gen = 0;
+	oldestCell = 0;
+	youngestCell = 10;
+	genYoungestCellBorn = 0;
+	genOldestCellBorn = 0;
 }
 
 void showTable(){
@@ -48,6 +110,9 @@ void showTable(){
 void addOneCell(){
 	int line, column;
 	
+	mostCellsLived += 1;
+	mostCellsLived += 1;
+	
 	fflush(stdin);
 	
 	printf("\nInsira as coordenadas da celula (linha, coluna): ");
@@ -60,6 +125,8 @@ void addOneCell(){
 //TODO: If's para lidar com erros
 void deleteOneCell(){
 	int line, column;
+	
+	mostCellsLived -= 1;
 	
 	fflush(stdin);
 	
@@ -79,6 +146,9 @@ void addCells(){
 	
 	printf("\nInsira a quantidade de celulas que deseja adicionar: ");
 	scanf("%d", &quant_cells);
+	
+	mostCellsLived += quant_cells;
+	lessCellsAlive += quant_cells;
 	
 	for (int i = 1; i <= quant_cells; i++){
 		showTable();
@@ -102,6 +172,8 @@ void deleteCells(){
 	printf("\nInsira a quantidade de celulas que deseja apagar: ");
 	scanf("%d", &quant_cells);
 	
+	mostCellsLived -= quant_cells;
+	
 	for (int i = 1; i <= quant_cells; i++){
 		showTable();
 		
@@ -113,12 +185,27 @@ void deleteCells(){
 	}
 }
 
+//Celulas vivas na presente geracao
+int aliveCells(){
+	int countAliveCells = 0, line, column;;
+	for (int line = 0; line < TAM; line++) {
+		for (int column = 0; column < TAM; column++) {
+			if (table[line][column] == 1) {
+				countAliveCells += 1;
+			}
+			
+		}
+	}
+	
+	return countAliveCells;
+}
+
 //neighbours: Celulas vizinhas vivas
 //Avanca Varias geracoes;
 //Se for preciso avancar apenas 1 geracao fazer advanceGen(1);
 //Se for preciso avancar varias geracoes fazer advanceGen(quantidade_de_geracoes);
 int advanceGen(int quant_gens){
-	int line, column, neighbours = 0;
+	int line, column, neighbours = 0, countAliveCells = 0;
 	if (quant_gens == 0) {
 		return 0;
 	} else {
@@ -244,41 +331,68 @@ int advanceGen(int quant_gens){
 				neighbours = 0;
 			}
 		}
-		
+	// Se o valor de cellsToBorn == 1 Significa que uma nova celula vai nascer
 	for (line = 0; line < TAM; line++) {
 		for (column = 0; column < TAM; column++) {
 			if (cellsToBorn[line][column] == 1) {
 				table[line][column] = 1;
 				cellsToBorn[line][column] = 0;
 			}
-			
+	// Se o valor de cellsToKill == 1 Significa que uma nova celula vai morrer
 			if (cellsToKill[line][column] == 1) {
 				table[line][column] = 0;
+				
+				if (youngestCell == ages[line][column] && gen != 0) {
+					youngestCell = gen;
+				}
+				
+				if (oldestCell - 1 == ages[line][column]) {
+					oldestCell = 0;
+				}
+				
+				ages[line][column] = 0;
 				cellsToKill[line][column] = 0;
 			}
 		}
 	}
-		
+	
+	countAliveCells = aliveCells();
+	
+	if (lessCellsAlive >= countAliveCells) {
+		lessCellsAlive = countAliveCells;
+		genLessCellsAlive = gen + 1;
+	}
+	
+	if (countAliveCells >= mostCellsLived) {
+		mostCellsLived = countAliveCells;
+		genMostCellsAlive = gen + 1;
+	}
+	
+	for (int line = 0; line < TAM; line++) {
+		for (column = 0; column < TAM; column++) {
+			if (table[line][column] == 1) {
+				ages[line][column] += 1;
+			}
+			
+			if (oldestCell < ages[line][column] && table[line][column] == 1) {
+				oldestCell = ages[line][column];
+				genOldestCellBorn = (gen + 1) - ages[line][column];
+			}
+			
+			if (youngestCell > ages[line][column] && table[line][column] == 1) {
+				youngestCell = ages[line][column];
+				genYoungestCellBorn = (gen + 1) - ages[line][column];
+			}
+		}
+	}
+	
+	youngestCell += 1;
+	oldestCell += 1;
+	gen += 1;
 	quant_gens -= 1;
 	advanceGen(quant_gens);
 	
 	}
-}
-
-//Funcoes para as Estatisticas do jogo
-//Celulas vivas na presente geracao
-int aliveCells(){
-	int contAliveCells = 0, line, column;;
-	for (int line = 0; line < TAM; line++) {
-		for (int column = 0; column < TAM; column++) {
-			if (table[line][column] == 1) {
-				contAliveCells += 1;
-			}
-			
-		}
-	}
-	
-	return contAliveCells;
 }
 
 int menu() {
@@ -316,6 +430,27 @@ int menu() {
     scanf("%d", &option);
     fflush(stdin);
     return option;
+}
+
+void getGameStatistics() {
+	printf("\n");
+	printf("\nQuantidade de celulas vivas: %d", aliveCells());
+	printf("\nNumero maximo de celulas vivas %d; Geracao: %d", mostCellsLived, genMostCellsAlive);
+	printf("\nNumero minimo de celulas vivas %d; Geracao: %d", lessCellsAlive, genLessCellsAlive);
+	printf("\nIdade da celulas mais velha %d; Nasceu na geracao: %d", oldestCell, genOldestCellBorn);
+	printf("\nIdade da celulas mais nova %d; Nasceu na geracao: %d", youngestCell, genYoungestCellBorn);
+	printf("\nGeracao atual: %d", gen);
+	
+	for (int line = 0; line < TAM; line++) {
+		for (int column = 0; column < TAM; column++) {
+			if (table[line][column] == 1) {
+				printf("\nIdade da celula (%d, %d): %d; \nNasceu na geracao: %d", line, column, ages[line][column], gen - ages[line][column]);
+			}
+		}
+	}
+	
+	printf("\n");
+	system("pause");
 }
 
 int main () {
@@ -358,9 +493,24 @@ int main () {
         		advanceGen(quant_gens);
             	break;
         	case 8:
+        		getGameStatistics();
             	break;
         	case 9:
-            	break;              
+            	break;
+            	
+			//Padroes para testes
+			case 10:
+				addGlider();
+				break;
+			case 11:
+				addBlinker();
+				break;
+			case 12:
+				addBlock();
+				break;
+			case 13:
+				addBote();
+				break; 
         	default:
             	printf("Opcao invalida, introduza uma opcao valida!");
             	system("pause");
