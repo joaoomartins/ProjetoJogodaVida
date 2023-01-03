@@ -127,83 +127,162 @@ void showTable(){
 }
 
 //Adiciona apenas 1 celula
-//TODO: If's para lidar com erros
 void addOneCell(){
-	int line, column;
+	int line, column, verification;
 	
-	mostCellsLived += 1;
-	mostCellsLived += 1;
-	
-	fflush(stdin);
-	
-	printf("\nInsira as coordenadas da celula (linha, coluna): ");
-	scanf("(%d, %d)", &line, &column);
+	do
+	{
+		fflush(stdin);
+
+		printf("\nInsira as coordenadas da celula (linha, coluna): ");
+		scanf("(%d, %d)", &line, &column);
+
+		verification = limitsVerification(line, column);
+
+		if (verification == 0)
+		{
+			printf("\nFora dos limites, reintroduza novos valores!");
+			printf("\nLimites do tabuleiro\n Linhas: 0-%d \n Colunas: 0-%d", TAMLinesConfigs, TAMColumnsConfigs);
+		}
+		
+
+	} while (verification == 0);
+
 	table[line][column] = 1;
 	
+	mostCellsLived += 1;
+	mostCellsLived += 1;
 }
 
+int limitsVerification(int line, int column) {
+	if (line >= TAMLinesConfigs || column >= TAMColumnsConfigs || line < 0 || column < 0 ) {
+		return 0;
+	}
+	else {
+		return 1;
+	}
+}	
+
 //Apaga apenas 1 celula, os parametros sao as coordenadas inseridas pelo utilizador
-//TODO: If's para lidar com erros
 void deleteOneCell(){
-	int line, column;
+	int line, column, verification;
 	
-	mostCellsLived -= 1;
-	
-	fflush(stdin);
-	
-	printf("\nInsira as coordenadas da celula (linha, coluna): ");
-	scanf("(%d, %d)", &line, &column);
+	do
+	{
+		fflush(stdin);
+
+		printf("\nInsira as coordenadas da celula (linha, coluna): ");
+		scanf("(%d, %d)", &line, &column);
+
+		verification = limitsVerification(line, column);
+
+		if (verification == 0)
+		{
+			printf("\nFora dos limites, reintroduza novos valores!");
+			printf("\nLimites do tabuleiro\n Linhas: 0-%d \n Colunas: 0-%d", TAMLinesConfigs, TAMColumnsConfigs);
+		}
+		
+
+	} while (verification == 0);
+
 	table[line][column] = 0;
+
+	mostCellsLived -= 1;
 	
 }
 
 //Adiciona Varias Celulas
 //quant_cells == Quantidade de Celulas a inserir pelo utilizador
-//TODO: If's para lidar com erros
 void addCells(){
-	int line, column, quant_cells;
+	int line, column, quant_cells, verification;
 	
-	fflush(stdin);
+	do
+	{
+		fflush(stdin);
+
+		printf("\nInsira a quantidade de celulas que deseja adicionar: ");
+		scanf("%d", &quant_cells);
+
+		if (quant_cells <= 0)
+		{
+			printf("\nIntroduza um valor valido!");
+		}
+		
+	} while (quant_cells <= 0);
 	
-	printf("\nInsira a quantidade de celulas que deseja adicionar: ");
-	scanf("%d", &quant_cells);
 	
-	mostCellsLived += quant_cells;
-	lessCellsAlive += quant_cells;
 	
 	for (int i = 1; i <= quant_cells; i++){
 		showTable();
 		
-		fflush(stdin);
+		do
+		{
+			fflush(stdin);
 		
-		printf("\nInsira as coordenadas da celula (linha, coluna): ");
-		scanf("(%d, %d)", &line, &column);
+			printf("\nInsira as coordenadas da celula (linha, coluna): ");
+			scanf("(%d, %d)", &line, &column);
+
+			verification = limitsVerification(line, column);
+
+			if (verification == 0)
+			{
+				printf("\nFora dos limites, reintroduza novos valores!");
+				printf("\nLimites do tabuleiro\n Linhas: 0-%d \n Colunas: 0-%d", TAMLinesConfigs, TAMColumnsConfigs);
+			}
+
+		} while (verification == 0);
+
 		table[line][column] = 1;
 	}
+
+	mostCellsLived += quant_cells;
+	lessCellsAlive += quant_cells;
+
+	//<= 0 introduzir outro valor
 }
 
 //Apaga Varias Celulas
 //quant_cells == Quantidade de Celulas a inserir pelo utilizador
-///TODO: If's para lidar com erros
 void deleteCells(){
-	int line, column, quant_cells;
+	int line, column, quant_cells, verification;
 	
-	fflush(stdin);
+	do
+	{
+		fflush(stdin);
 	
-	printf("\nInsira a quantidade de celulas que deseja apagar: ");
-	scanf("%d", &quant_cells);
+		printf("\nInsira a quantidade de celulas que deseja apagar: ");
+		scanf("%d", &quant_cells);
+
+		if (quant_cells <= 0)
+		{
+			printf("\nIntroduza um valor valido!");
+		}
+	} while (quant_cells <= 0);
 	
-	mostCellsLived -= quant_cells;
 	
 	for (int i = 1; i <= quant_cells; i++){
 		showTable();
 		
-		fflush(stdin);
+		do
+		{
+			fflush(stdin);
 		
-		printf("\nInsira as coordenadas da celula (linha, coluna): ");
-		scanf("(%d, %d)", &line, &column);
+			printf("\nInsira as coordenadas da celula (linha, coluna): ");
+			scanf("(%d, %d)", &line, &column);
+
+			verification = limitsVerification(line, column);
+
+			if (verification == 0)
+			{
+				printf("\nFora dos limites, reintroduza novos valores!");
+				printf("\nLimites do tabuleiro\n Linhas: 0-%d \n Colunas: 0-%d", TAMLinesConfigs, TAMColumnsConfigs);
+			}
+		} while (verification == 0);
+		
 		table[line][column] = 0;
 	}
+
+	mostCellsLived -= quant_cells;
 }
 
 //Celulas vivas na presente geracao
@@ -484,7 +563,7 @@ int advanceGen(int quant_gens){
 			
 			if (table[line][column] == 1 && youngestCell >= ages[line][column]) {
 				youngestCell = ages[line][column];
-				//O contador de geracoes (a variavel gen) ainda nao avancou por isso é que adiciona + 1 nesta conta
+				//O contador de geracoes (a variavel gen) ainda nao avancou por isso ï¿½ que adiciona + 1 nesta conta
 				genYoungestCellBorn = (gen + 1) - ages[line][column];
 			}
 		}
