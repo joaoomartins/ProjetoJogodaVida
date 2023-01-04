@@ -341,7 +341,7 @@ void changeTableTAM() {
 		printf("\nTamanho do tabuleiro atualizado com sucesso!\n");
 		cooldown(3.0);
 	} else {
-		printf("\nLimite de tabuleiro excedido. Por favor insira um numero menor que 25 no tamanho do tabuleiro.");
+		printf("\nLimite de tabuleiro excedido. Por favor insira um numero menor que 25 no tamanho do tabuleiro.\n");
 		system("pause");
 	}
 }
