@@ -115,7 +115,37 @@ void showTable(){
 	system("cls");
 	
 	for (line = 0; line < TAMLinesConfigs; line++) {
+		if (line != 0)
+		{
+			printf("%d", line);
+		}
+				
+		if (line < 10) {
+			printf(" ");
+		}
 		for (column = 0; column < TAMColumnsConfigs; column++) {
+			if (column == 0 && line == 0)
+			{
+				for (int i = 0; i < TAMColumnsConfigs; i++)
+				{
+					if (i < 10)
+					{
+						printf(" ");
+					}
+					printf(" %d", i);
+				}
+				printf("\n");
+				if (line == 0)
+				{
+					printf("%d", line);
+				}
+				
+			}
+			if (line == 0 && column == 0)
+			{
+				printf(" ");
+			}
+			
 			if (table[line][column] == 1) {
 				printf(" * ");
 			} else {
@@ -238,7 +268,6 @@ void addCells(){
 	mostCellsLived += quant_cells;
 	lessCellsAlive += quant_cells;
 
-	//<= 0 introduzir outro valor
 }
 
 //Apaga Varias Celulas
