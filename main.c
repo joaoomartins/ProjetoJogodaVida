@@ -342,12 +342,13 @@ void changeTableTAM() {
 		cooldown(3.0);
 	} else {
 		printf("\nLimite de tabuleiro excedido. Por favor insira um numero menor que 25 no tamanho do tabuleiro.");
+		system("pause");
 	}
 }
 
 void changeTableVelocity() {
 	float newSecs = 0;
-	printf("\nIntroduza a quantidade de tempo que deseja que o programa demore ao avancar de geracao em segundos (Exemplo 1): ");
+	printf("\nIntroduza a quantidade de tempo que deseja que o programa demore ao avancar de geracao em segundos (Exemplo: 1): ");
 	scanf("%f", &newSecs);
 	
 	if (newSecs >= 0) {
@@ -375,11 +376,11 @@ void EDTableOnAdvanceGen() {
 void EDStatisticsOnAdvanceGen() {
 	if (showGameStatisticsAdvanceGen == 1) {
 		showGameStatisticsAdvanceGen = 0;
-		printf("\nAs estatisticas do jogo nao iram aparecer ao avancar a geracao!\n");
+		printf("\nAs estatisticas do jogo nao irao aparecer ao avancar a geracao!\n");
 		cooldown(3.0);
 	} else {
 		showGameStatisticsAdvanceGen = 1;
-		printf("\nAs estatisticas do jogo iram aparecer ao avancar a geracao!\n");
+		printf("\nAs estatisticas do jogo irao  aparecer ao avancar a geracao!\n");
 		cooldown(3.0);
 	}
 }
@@ -658,7 +659,7 @@ int menuConfigs() {
     printf("|                   |___/                                                             |\n");
     printf("|                                                                                     |\n");
     printf("|*************************************************************************************|\n");
-    printf("|******************************** MENU CONFIGURACOES *********************************|\n");
+    printf("|******************************* MENU CONFIGURACOES **********************************|\n");
     printf("|************************************ Opcoes *****************************************|\n");
     printf("|*************************************************************************************|\n");
     printf("|**      {1} - Dimensoes do tabuleiro   **       {3} - Exibicao do tabuleiro        **|\n");
