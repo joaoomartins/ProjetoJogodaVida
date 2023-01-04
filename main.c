@@ -156,6 +156,15 @@ void showTable(){
 	}
 }
 
+int limitsVerification(int line, int column) {
+	if (line >= TAMLinesConfigs || column >= TAMColumnsConfigs || line < 0 || column < 0 ) {
+		return 0;
+	}
+	else {
+		return 1;
+	}
+}
+
 //Adiciona apenas 1 celula
 void addOneCell(){
 	int line, column, verification;
@@ -183,15 +192,6 @@ void addOneCell(){
 	mostCellsLived += 1;
 	mostCellsLived += 1;
 }
-
-int limitsVerification(int line, int column) {
-	if (line >= TAMLinesConfigs || column >= TAMColumnsConfigs || line < 0 || column < 0 ) {
-		return 0;
-	}
-	else {
-		return 1;
-	}
-}	
 
 //Apaga apenas 1 celula, os parametros sao as coordenadas inseridas pelo utilizador
 void deleteOneCell(){
